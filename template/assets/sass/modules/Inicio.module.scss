@@ -1,0 +1,52 @@
+@import '../base/constantes';
+@import '../base/fuentes';
+
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #0d1117;
+  }
+  h1,
+  h2 {
+    color: #fff;
+    font-size: 1.2rem;
+  }
+  input,
+  button {
+    padding: 10px;
+    margin: 10px 0;
+    font-size: 0.5rem;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 0.8rem;
+    color: #fff;
+  }
+  th,
+  td {
+    padding: 12px;
+    border: 0px solid #ddd;
+    text-align: left;
+  }
+  th {
+    background-color: #151b23;
+  }
+  tr:nth-child(even) {
+    background-color: #0d1117;
+  }
+  tr:hover {
+    background-color: #151b23;
+  }
+  button {
+    background-color: #29903b;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 0.6rem;
+  }
+  button:hover {
+    background-color: #45a049;
+  }

@@ -1,0 +1,64 @@
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+*::selection {
+    background-color: $color35;
+}
+
+html {
+    font-size: 10px;
+
+    @media (width <=$bp-xxlarge) {
+        font-size: 9px;
+    }
+
+    @media (width <=$bp-large) {
+        font-size: 8px;
+    }
+
+    @media (width <=$bp-medium) {
+        font-size: 7px;
+    }
+
+    @media (width <=$bp-small) {
+        font-size: 6px;
+    }
+
+    @media (width <=$bp-little) {
+        font-size: 7px;
+    }
+}
+
+a,
+a:link,
+a:visited {
+    text-decoration: none;
+    color: $color99;
+}
+
+ul {
+    list-style: none;
+}
+
+img {
+    display: block;
+    user-select: none;
+}
+
+body {
+    background-size: cover;
+    height: 100%;
+    width: 100%;
+    font-family: $font3;
+
+}
+
+html {
+    background: black;
+}

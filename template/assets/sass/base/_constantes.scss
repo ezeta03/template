@@ -1,0 +1,67 @@
+// TAMAÑOS
+$bp-big: 100em; //1600px
+$bp-xxlarge: 75em; //1200px
+$bp-xlarge: 62em; //992px
+$bp-large: 54em; //864px-----3
+$bp-medium: 48em; //768px
+$bp-small: 42em; //672px
+$bp-xsmall: 36em; //576px-----1
+$bp-xxsmall: 30em; //480px
+$bp-little: 24em; // 320px
+
+// COLORES
+$color00: #fff;
+$color99: #000;
+
+$color11: #5273ff;
+$color12: #3b5af7;
+$color13: #2441ef;
+$color14: #0d28e7;
+$color15: #002cf2;
+
+$color21: #895cf7;
+$color22: #7d43ed;
+$color23: #6b15ce;
+$color24: #500bb2;
+$color25: #40059e;
+
+$color31: #acead3;
+$color32: #8fecd1;
+$color33: #71eecf;
+$color34: #53f0cd;
+$color35: #33e9d0;
+$color36: #5ed3afb2;
+$color37: #43BF96;
+
+$color41: #f2db7c;
+$color42: #efd450;
+$color43: #f4d733;
+$color44: #efcc20;
+$color45: #e5b900;
+
+$color51: #545454;
+$color52: #464646;
+$color53: #383838;
+$color54: #2a2a2a;
+$color55: #1c1c1c;
+
+$color61: #F24F4F;
+
+
+.inv {
+    display: none !important;
+}
+
+.container {
+    width: 100%;
+    max-width: 160rem;
+    display: flex;
+}
+
+.opac {
+    opacity: 0;
+}
+
+.active {
+    display: inline !important;
+}
