@@ -1,7 +1,27 @@
-import { useState } from "react";
+import { useState, useEffect } from 'react';
+import { deleteBlock, listBlocks } from '../../assets/api/apiService.js';
 import "../../../assets/sass/modules/Inicio.module.scss";
 
 const Inicio = () => {
+    const [blocks, setBlocks] = useState([]);
+
+    useEffect(() => {
+      async function fetchBlocks() {
+        const response = await listBlocks();
+        if (response.success) {
+          setBlocks(response.blocks);
+        }
+      }
+      fetchBlocks();
+    }, []);
+  
+    const handleDeleteBlock = async (blockId) => {
+      const response = await deleteBlock(blockId);
+      if (response.success) {
+        setBlocks(blocks.filter(block => block.id !== blockId));
+      }
+    };
+
   return (
     <>
       <h1>Manage Notion Blocks</h1>
@@ -17,10 +37,21 @@ const Inicio = () => {
             <th>Action</th>
           </tr>
         </thead>
-        <tbody id="blockList"></tbody>
+        <tbody>
+          {blocks.map(block => (
+            <tr key={block.id}>
+              <td>{block.type}</td>
+              <td>{block.id}</td>
+              <td>{block.content}</td>
+              <td>
+                <button onClick={() => handleDeleteBlock(block.id)}>Delete</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
       </table>
     </>
   );
-};
+}
 
 export default Inicio;
