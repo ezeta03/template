@@ -62,6 +62,21 @@ app.get('/api/list-blocks', async (req, res) => {
   }
 });
 
+// Nueva ruta para obtener los datos de la base de datos
+app.get('/api/get-database', async function (request, response) {
+  const databaseId = process.env.NOTION_DATABASE_ID;
+
+  try {
+    const queryResponse = await client.databases.retrieve({
+      database_id: databaseId,
+    });
+    response.json(queryResponse);
+  } catch (error) {
+    console.error('Error fetching data from Notion:', error);
+    response.status(500).json({ message: 'Internal Server Error', error });
+  }
+});
+
 // Inicia el servidor en el puerto especificado
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
