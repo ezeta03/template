@@ -25,16 +25,7 @@ const Inicio = () => {
   return (
     <>
       <main>
-        <div className={styles.heading}>
-          <h1>Manage Notion Blocks</h1>
-        </div>
         <div className={styles.content}>
-          <div className={styles.menu}>
-            <h2>Menu</h2>
-            <SafeLink to="/calendar" target="_blank">
-              Calendar
-            </SafeLink>
-          </div>
           <div className={styles.data}>
             <div className={styles.search}>
               <input type="text" id="blockId" placeholder="Enter Block ID" />

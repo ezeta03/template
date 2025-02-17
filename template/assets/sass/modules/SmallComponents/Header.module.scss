@@ -1,0 +1,61 @@
+@import "../../base/constantes";
+@import "../../base/fuentes";
+
+header {
+    width: 100%;
+    height: 4rem;
+    background-color: #151b23;
+    color: $color00;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    .logoContainer {
+        height: 5rem;
+        width: 25%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        >svg {
+            height: 100%;
+        }
+    }
+
+    .roleContainer {
+        height: 5rem;
+        width: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        >p {
+            text-align: center;
+            font-size: 3rem;
+            font-family: $font2;
+            color: $color99;
+        }
+
+    }
+
+    .userContainer {
+        height: 5rem;
+        width: 25%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+
+        >svg {
+            height: 100%;
+            aspect-ratio: 1;
+        }
+
+        >p {
+            color: $color99;
+            text-transform: capitalize;
+            font-size: 1.6rem;
+            font-family: $font2;
+        }
+    }
+}

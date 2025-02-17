@@ -1,0 +1,8 @@
+@import "../../base/constantes";
+@import "../../base/fuentes";
+
+main {
+  display: flex;
+  height: calc(100vh - 4rem);
+  position: relative;
+}

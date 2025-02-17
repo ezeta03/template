@@ -44,7 +44,6 @@ const Calendar = () => {
               <td>{page.properties.Selección.select.name}</td>
               <td>{page.properties.Fecha?.date?.start || "No date"}</td>
               <td>{page.properties.Fecha?.date?.end || "No date"}</td>
-
               <td>{page.id}</td>
               {/* <td>{page.created_time}</td>
               <td>{page.last_edited_time}</td> */}
