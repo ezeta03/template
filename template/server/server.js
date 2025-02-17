@@ -63,17 +63,44 @@ app.get('/api/list-blocks', async (req, res) => {
 });
 
 // Nueva ruta para obtener los datos de la base de datos
-app.get('/api/get-database', async function (request, response) {
-  const databaseId = process.env.NOTION_DATABASE_ID;
-
+app.get('/api/properties', async (req, res) => {
   try {
-    const queryResponse = await client.databases.retrieve({
+    const databaseId = process.env.NOTION_DATABASE_ID;
+    const response = await client.databases.query({
+      database_id: databaseId,
+      filter_properties: ["title", "eKrO", "a%60D%5D", "~%7C%60r"] // Reemplaza con los IDs de las propiedades que deseas filtrar
+    });
+    console.log(response.results); // Agrega esto para ver la respuesta en la consola
+    res.json({ success: true, properties: response.results });
+  } catch (error) {
+    console.error('Error retrieving properties:', error);
+    res.json({ success: false, error });
+  }
+});
+
+app.get('/api/pages', async (req, res) => {
+  try {
+    const databaseId = process.env.NOTION_DATABASE_ID;
+    const response = await client.databases.query({
       database_id: databaseId,
     });
-    response.json(queryResponse);
+    
+    const pages = await Promise.all(
+      response.results.map(async (page) => {
+        const pageDetails = await client.pages.retrieve({ page_id: page.id });
+        return {
+          id: pageDetails.id,
+          created_time: pageDetails.created_time,
+          last_edited_time: pageDetails.last_edited_time,
+          properties: pageDetails.properties,
+        };
+      })
+    );
+
+    res.json({ success: true, pages });
   } catch (error) {
-    console.error('Error fetching data from Notion:', error);
-    response.status(500).json({ message: 'Internal Server Error', error });
+    console.error('Error retrieving pages:', error);
+    res.json({ success: false, error });
   }
 });
 
