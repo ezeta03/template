@@ -80,16 +80,14 @@ app.get('/api/properties', async (req, res) => {
 
 app.get('/api/pages', async (req, res) => {
   try {
-    const databaseId = client.env.NOTION_DATABASE_ID;
-    const { page = 1, pageSize = 10 } = req.query; // Obtener los parámetros de paginación
-    const startCursor = (page - 1) * pageSize;
-
+    const databaseId = process.env.NOTION_DATABASE_ID;
+    const { cursor } = req.query;
     const response = await client.databases.query({
       database_id: databaseId,
-      page_size: pageSize,
-      start_cursor: startCursor,
+      start_cursor: cursor || undefined,
+      page_size: 20,
     });
-
+    
     const pages = await Promise.all(
       response.results.map(async (page) => {
         const pageDetails = await client.pages.retrieve({ page_id: page.id });
@@ -102,7 +100,7 @@ app.get('/api/pages', async (req, res) => {
       })
     );
 
-    res.json({ success: true, pages, hasMore: response.has_more, nextCursor: response.next_cursor });
+    res.json({ success: true, pages, nextCursor: response.next_cursor, hasMore: response.has_more });
   } catch (error) {
     console.error('Error retrieving pages:', error);
     res.json({ success: false, error });

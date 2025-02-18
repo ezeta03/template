@@ -22,7 +22,7 @@ export async function fetchProperties() {
   return response.json();
 }
 
-export async function fetchPages(page = 1, pageSize = 10) {
-  const response = await fetch(`${API_BASE_URL}/pages?page=${page}&pageSize=${pageSize}`);
+export async function fetchPages() {
+  const response = await fetch(`${API_BASE_URL}/pages`);
   return response.json();
 }
