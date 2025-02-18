@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { deleteBlock, listBlocks } from "../../assets/api/apiService.js";
 import styles from "../../../assets/sass/modules/Inicio.module.scss";
-import SafeLink from "../SmallComponents/SafeLink.jsx";
+// import SafeLink from "../SmallComponents/SafeLink.jsx";
 const Inicio = () => {
   const [blocks, setBlocks] = useState([]);
 
@@ -27,12 +27,11 @@ const Inicio = () => {
       <main>
         <div className={styles.content}>
           <div className={styles.data}>
+            <h2>Block List</h2>
             <div className={styles.search}>
               <input type="text" id="blockId" placeholder="Enter Block ID" />
               <button id="deleteButton">Delete Block</button>
             </div>
-
-            <h2>Block List</h2>
             <table>
               <thead>
                 <tr>
@@ -49,7 +48,7 @@ const Inicio = () => {
                     <td>{block.id}</td>
                     <td>{block.content}</td>
                     <td>
-                      <button onClick={() => handleDeleteBlock(block.id)}>
+                      <button className={styles.buttonTable} onClick={() => handleDeleteBlock(block.id)}>
                         Delete
                       </button>
                     </td>

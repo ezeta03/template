@@ -1,6 +1,12 @@
+@import "../../base/constantes";
+@import "../../base/fuentes";
+
 .wrapper {
     width: 80%;
-    // height: 100%;
+    height: 100%;
+    background-color: $color99;
+    border: 0.1rem solid rgba($color: #fff, $alpha: 0.2);
+    border-radius: 0.4rem;
 
     nav {
         background: #f8f9fa;
