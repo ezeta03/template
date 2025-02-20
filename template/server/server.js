@@ -81,29 +81,57 @@ app.get('/api/properties', async (req, res) => {
 app.get('/api/pages', async (req, res) => {
   try {
     const databaseId = process.env.NOTION_DATABASE_ID;
-    const { cursor } = req.query;
-    const response = await client.databases.query({
-      database_id: databaseId,
-      start_cursor: cursor || undefined,
-      page_size: 20,
-    });
+    const pageSize = 20;
     
+    // Realizar una consulta inicial para obtener el total de registros
+    const initialQuery = await client.databases.query({
+      database_id: databaseId,
+      page_size: 100 // Máximo permitido por Notion
+    });
+
+    let allResults = [...initialQuery.results];
+    let nextCursor = initialQuery.next_cursor;
+
+    // Obtener todos los resultados usando el cursor
+    while (nextCursor) {
+      const response = await client.databases.query({
+        database_id: databaseId,
+        start_cursor: nextCursor,
+        page_size: 100
+      });
+      allResults = [...allResults, ...response.results];
+      nextCursor = response.next_cursor;
+    }
+
+    // Calcular la paginación
+    const page = parseInt(req.query.page) || 1;
+    const startIndex = (page - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+    const paginatedResults = allResults.slice(startIndex, endIndex);
+
+    // Obtener los detalles de las páginas paginadas
     const pages = await Promise.all(
-      response.results.map(async (page) => {
-        const pageDetails = await client.pages.retrieve({ page_id: page.id });
+      paginatedResults.map(async (page) => {
         return {
-          id: pageDetails.id,
-          created_time: pageDetails.created_time,
-          last_edited_time: pageDetails.last_edited_time,
-          properties: pageDetails.properties,
+          id: page.id,
+          created_time: page.created_time,
+          last_edited_time: page.last_edited_time,
+          properties: page.properties,
         };
       })
     );
 
-    res.json({ success: true, pages, nextCursor: response.next_cursor, hasMore: response.has_more });
+    res.json({
+      success: true,
+      pages,
+      total: allResults.length,
+      currentPage: page,
+      totalPages: Math.ceil(allResults.length / pageSize)
+    });
+
   } catch (error) {
     console.error('Error retrieving pages:', error);
-    res.json({ success: false, error });
+    res.json({ success: false, error: error.message });
   }
 });
 
