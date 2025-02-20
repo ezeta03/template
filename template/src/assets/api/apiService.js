@@ -22,7 +22,15 @@ export async function fetchProperties() {
   return response.json();
 }
 
-export async function fetchPages() {
-  const response = await fetch(`${API_BASE_URL}/pages`);
-  return response.json();
+export async function fetchPages(page = 1) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/pages?page=${page}`);
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Error in fetchPages:', error);
+    throw error;
+  }
 }

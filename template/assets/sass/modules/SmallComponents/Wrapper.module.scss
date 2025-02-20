@@ -2,9 +2,9 @@
 @import "../../base/fuentes";
 
 .wrapper {
-    width: 80%;
+    width: calc(100% - 4rem);
     height: 100%;
-    background-color: $color99;
+    background-color: $color00;
     border: 0.1rem solid rgba($color: #fff, $alpha: 0.2);
     border-radius: 0.4rem;
 

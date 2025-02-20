@@ -1,30 +1,24 @@
-// import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 import styles from "../../../assets/sass/modules/SmallComponents/Aside.module.scss";
-// import { AsideImage } from "../../../assets/images/svgComponents.jsx";
-// import sideBarImage from "../../../assets/images/aside.svg";
+// import logoExtended from "../../../assets/images/192.webp"; // Ruta del logo extendido
+import logoCollapsed from "../../../assets/images/180.webp"; // Ruta del logo colapsado
+import { GlobalBlueIcon } from "../../../assets/images/svgComponents.jsx";
 
 const Aside = () => {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
+  const toggleAside = () => {
+    setIsCollapsed(!isCollapsed);
+  };
 
   return (
-    <aside className={styles.aside}>
-      <nav>
-        <ul>
-          <li>
-            <a href="/">Home</a>
-          </li>
-          <li>
-            <a href="/calendar">Calendar</a>
-          </li>
-          <li>
-            <a href="/about">About</a>
-          </li>
-        </ul>
-      </nav>
-      <div className={styles.image}>
-        {/* <AsideImage /> */}
-      </div>
-      <div className={styles.version}>
-        v1.0.0
+    <aside className={`${styles.aside} ${isCollapsed ? styles.collapsed : ""}`}>
+      <button onClick={toggleAside} className={styles.toggleButton}>
+      {isCollapsed ? "Expand" : "Collapse"}
+
+      </button>
+      <div className={styles.content}>
+        {/* Contenido del Aside */}
       </div>
     </aside>
   );

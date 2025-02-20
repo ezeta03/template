@@ -1,34 +1,42 @@
 import React, { useState, useEffect } from "react";
 import { fetchPages } from "../../assets/api/apiService";
-import useTable from "./useTable";
 import styles from "../../../assets/sass/modules/Calendar.module.scss";
+
+const LoadingSpinner = () => (
+  <div className={styles.loadingContainer}>
+    <div className={styles.spinner}></div>
+    <p>Loading data...</p>
+  </div>
+);
 
 const Calendar = () => {
   const [pages, setPages] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalItems, setTotalItems] = useState(0);
-  const rowsPerPage = 20;
+  const [totalPages, setTotalPages] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    async function getPages() {
+    const loadPages = async () => {
+      setIsLoading(true);
+      setError(null);
       try {
-        const response = await fetchPages();
+        const response = await fetchPages(currentPage);
         if (response.success) {
           setPages(response.pages);
-          setTotalItems(response.pages.length);
+          setTotalPages(response.totalPages);
         } else {
-          console.error('Error fetching pages:', response.error);
+          setError(response.error || 'Error al cargar los datos');
         }
-      } catch (error) {
-        console.error('Error in getPages:', error);
+      } catch (err) {
+        setError('Error de conexión al servidor');
+        console.error('Error loading pages:', err);
       }
-    }
-    getPages();
-  }, []);
+      setIsLoading(false);
+    };
 
-  const { slice, range } = useTable(pages, currentPage, rowsPerPage);
-
-  const totalPages = Math.ceil(totalItems / rowsPerPage);
+    loadPages();
+  }, [currentPage]);
 
   const handlePageChange = (pageNumber) => {
     if (pageNumber >= 1 && pageNumber <= totalPages) {
@@ -37,9 +45,8 @@ const Calendar = () => {
     }
   };
 
-  // Calculate visible page range
   const getVisiblePageRange = () => {
-    const delta = 2; // Number of pages to show before and after current page
+    const delta = 2;
     const range = [];
     const rangeWithDots = [];
 
@@ -69,7 +76,7 @@ const Calendar = () => {
   };
 
   return (
-    <main>
+    <main className={styles.mainContainer}>
       <div className={styles.content}>
         <div className={styles.data}>
           <h2>Database Pages</h2>
@@ -78,63 +85,81 @@ const Calendar = () => {
             <button id="deleteButton">Delete Block</button>
           </div>
           
-          <table>
-            <thead>
-              <tr>
-                <th>Content</th>
-                <th>Estado</th>
-                <th>Clasificación</th>
-                <th>Inicio</th>
-                <th>Final</th>
-                <th>Page ID</th>
-              </tr>
-            </thead>
-            <tbody>
-              {slice.map((page) => (
-                <tr key={page.id}>
-                  <td>{page.properties.Nombre.title[0].plain_text}</td>
-                  <td>{page.properties.Estado.status.name}</td>
-                  <td>{page.properties.Selección.select.name}</td>
-                  <td>{page.properties.Fecha?.date?.start || "No date"}</td>
-                  <td>{page.properties.Fecha?.date?.end || "No date"}</td>
-                  <td>{page.id}</td>
+          <div className={styles.tableContainer}>
+            <table>
+              <thead>
+                <tr>
+                  <th className={styles.contentCol}>Content</th>
+                  <th className={styles.statusCol}>Estado</th>
+                  <th className={styles.classificationCol}>Clasificación</th>
+                  <th className={styles.dateCol}>Inicio</th>
+                  <th className={styles.dateCol}>Final</th>
+                  <th className={styles.idCol}>Page ID</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-
-          <div className={styles.pagination}>
-            <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-              className={styles.paginationButton}
-            >
-              Anterior
-            </button>
-
-            {getVisiblePageRange().map((pageNumber, index) => (
-              <button
-                key={index}
-                onClick={() => 
-                  pageNumber !== '...' && handlePageChange(pageNumber)
-                }
-                className={`${styles.paginationButton} ${
-                  pageNumber === currentPage ? styles.active : ''
-                } ${pageNumber === '...' ? styles.dots : ''}`}
-                disabled={pageNumber === '...'}
-              >
-                {pageNumber}
-              </button>
-            ))}
-
-            <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-              className={styles.paginationButton}
-            >
-              Siguiente
-            </button>
+              </thead>
+              <tbody>
+                {isLoading ? (
+                  <tr>
+                    <td colSpan="6">
+                      <LoadingSpinner />
+                    </td>
+                  </tr>
+                ) : error ? (
+                  <tr>
+                    <td colSpan="6" className={styles.error}>
+                      {error}
+                    </td>
+                  </tr>
+                ) : (
+                  pages.map((page) => (
+                    <tr key={page.id}>
+                      <td className={styles.contentCol}>{page.properties.Nombre.title[0].plain_text}</td>
+                      <td className={styles.statusCol}>{page.properties.Estado.status.name}</td>
+                      <td className={styles.classificationCol}>{page.properties.Selección.select.name}</td>
+                      <td className={styles.dateCol}>{String(page.properties.Fecha?.date?.start).split("T")[0].replaceAll("-", "/") || "No date"}</td>
+                      <td className={styles.dateCol}>{String(page.properties.Fecha?.date?.end).split("T")[0].replaceAll("-", "/") || "No date"}</td>
+                      <td className={styles.idCol}>{page.id}</td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
           </div>
+
+          {!isLoading && !error && (
+            <div className={styles.pagination}>
+              <button
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+                className={styles.paginationButton}
+              >
+                Anterior
+              </button>
+
+              {getVisiblePageRange().map((pageNumber, index) => (
+                <button
+                  key={index}
+                  onClick={() => 
+                    pageNumber !== '...' && handlePageChange(pageNumber)
+                  }
+                  className={`${styles.paginationButton} ${
+                    pageNumber === currentPage ? styles.active : ''
+                  } ${pageNumber === '...' ? styles.dots : ''}`}
+                  disabled={pageNumber === '...'}
+                >
+                  {pageNumber}
+                </button>
+              ))}
+
+              <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className={styles.paginationButton}
+              >
+                Siguiente
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </main>

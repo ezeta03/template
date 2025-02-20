@@ -24,7 +24,7 @@ const Inicio = () => {
 
   return (
     <>
-      <main>
+      <main className={styles.mainContainer}>
         <div className={styles.content}>
           <div className={styles.data}>
             <h2>Block List</h2>
@@ -32,30 +32,35 @@ const Inicio = () => {
               <input type="text" id="blockId" placeholder="Enter Block ID" />
               <button id="deleteButton">Delete Block</button>
             </div>
-            <table>
-              <thead>
-                <tr>
-                  <th>Type</th>
-                  <th>ID</th>
-                  <th>Content</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {blocks.map((block) => (
-                  <tr key={block.id}>
-                    <td>{block.type}</td>
-                    <td>{block.id}</td>
-                    <td>{block.content}</td>
-                    <td>
-                      <button className={styles.buttonTable} onClick={() => handleDeleteBlock(block.id)}>
-                        Delete
-                      </button>
-                    </td>
+            <div className={styles.tableContainer}>
+              <table>
+                <thead>
+                  <tr>
+                     <th className={styles.typeCol}>Type</th>
+                     <th className={styles.idCol}>ID</th>
+                     <th className={styles.contentCol}>Content</th>
+                     <th className={styles.actionCol}>Action</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {blocks.map((block) => (
+                    <tr key={block.id}>
+                      <td className={styles.typeCol}>{block.type}</td>
+                      <td className={styles.idCol}>{block.id}</td>
+                      <td className={styles.contentCol}>{block.content}</td>
+                      <td className={styles.actionCol}>
+                        <button
+                          className={styles.buttonTable}
+                          onClick={() => handleDeleteBlock(block.id)}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </main>
